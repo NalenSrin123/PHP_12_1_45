@@ -45,7 +45,7 @@
             </div>
 
             <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-                <form id="registerForm" class="space-y-6">
+                <form id="registerForm" class="space-y-6" method="post" enctype="multipart/form-data" action="function.php">
                     <!-- Username Field -->
                     <div class="space-y-2">
                         <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
@@ -54,7 +54,7 @@
                                 type="text" 
                                 id="username" 
                                 name="username" 
-                                required 
+                                
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none"
                                 placeholder="Choose a username"
                             >
@@ -124,17 +124,14 @@
                     <!-- Profile Field -->
                     <div class="space-y-2">
                         <label for="profile" class="block text-sm font-medium text-gray-700">Profile Type</label>
-                        <select 
-                            id="profile" 
-                            name="profile" 
-                            required 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none bg-white"
-                        >
-                            <option value="">Select your profile</option>
-                            <option value="student">Student</option>
-                            <option value="instructor">Instructor</option>
-                            <option value="professional">Professional</option>
-                        </select>
+                      <input 
+                                type="file" 
+                                id="profile" 
+                                name="profile" 
+                                
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none pr-12"
+                                
+                            >
                     </div>
 
                 
@@ -143,6 +140,7 @@
                     <button 
                         type="submit" 
                         id="submitBtn"
+                        name="register"
                         class="w-full bg-primary-600 text-white py-3 px-4 rounded-lg hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 transition-all duration-200 font-medium text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                     >
                         <span id="submitText">Create Account</span>
@@ -217,33 +215,6 @@
             
             document.getElementById('strengthText').textContent = strength > 0 ? texts[strength - 1] : 'Password strength';
         }
-
-        // Form submission
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            
-            // Show loading state
-            submitBtn.disabled = true;
-            submitText.textContent = 'Creating Account...';
-            loadingSpinner.classList.remove('hidden');
-            
-            // Simulate registration process
-            setTimeout(() => {
-                alert('Account created successfully! Welcome to EduLearn!');
-                
-                // Reset button state
-                submitBtn.disabled = false;
-                submitText.textContent = 'Create Account';
-                loadingSpinner.classList.add('hidden');
-                
-                // Redirect to login or dashboard
-                window.location.href = 'login.html';
-            }, 2000);
-        });
 
         // Input focus animations
         const inputs = document.querySelectorAll('input, select');

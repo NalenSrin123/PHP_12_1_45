@@ -91,7 +91,7 @@
             </div>
             
             <!-- Login Form -->
-            <form id="loginForm" class="space-y-6 relative z-10">
+            <form id="loginForm" class="space-y-6 relative z-10" action="function.php" method="post"> 
                 <!-- Email Field -->
                 <div>
                     <label for="email" class="block text-sm font-semibold text-gray-700 mb-2 font-body">Email Address</label>
@@ -162,6 +162,7 @@
                 <button 
                     type="submit" 
                     id="loginBtn"
+                    name="login"
                     class="w-full bg-blue-800 text-white py-3 px-4 rounded-xl font-semibold font-body btn-hover focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                     <span id="btnText">Login</span>
@@ -213,49 +214,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                 `;
             }
-        });
-        
-        // Form submission with loading state and error handling
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const loginBtn = document.getElementById('loginBtn');
-            const btnText = document.getElementById('btnText');
-            const btnSpinner = document.getElementById('btnSpinner');
-            const errorMessage = document.getElementById('errorMessage');
-            const form = document.getElementById('loginForm');
-            
-            // Hide error message
-            errorMessage.classList.add('hidden');
-            
-            // Show loading state
-            loginBtn.disabled = true;
-            btnText.textContent = 'Logging in...';
-            btnSpinner.classList.remove('hidden');
-            
-            // Simulate login process
-            setTimeout(() => {
-                // Reset button state
-                loginBtn.disabled = false;
-                btnText.textContent = 'Login';
-                btnSpinner.classList.add('hidden');
-                
-                // Simulate login failure for demo (remove in production)
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                
-                if (email === 'demo@example.com' && password === 'password') {
-                    // Success - redirect to dashboard
-                    window.location.href = 'dashboard.html';
-                } else {
-                    // Show error with shake animation
-                    errorMessage.classList.remove('hidden');
-                    form.classList.add('shake');
-                    setTimeout(() => {
-                        form.classList.remove('shake');
-                    }, 500);
-                }
-            }, 2000);
         });
         
         // Input field animations
