@@ -1,7 +1,21 @@
+
+<?php 
+session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+include '../connection.php';
+    global $con;
+    $email=$_SESSION['login'];
+    $select_user="SELECT `id` FROM `users` WHERE `email`='$email'";
+    $exe=$con->query($select_user);
+    $user=$exe->fetch_assoc();  
+?>
 <div class="modal">
     <form action="" method="post" enctype="multipart/form-data">
         <h1 id="title">Add Course</h1>
         <div class="form-group">
+            <input type="hidden" name="" id="user_id" value="<?php echo $user['id'] ?>">
             <label for="">Course Name</label>
             <select name="name" id="name" class="form-control">
                 <option value="Web Design">Web Design</option>
@@ -25,6 +39,7 @@
             <label for="">Image</label>
             <input type="file" name="image" id="image" class="form-control">
             <img class="w-[60px] rounded-md cursor-pointer"  id="img" src="https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=" alt="">
+            <input type="hidden" name="image_name" id="image_name">
         </div>
         <div class="form-group">
             <label for="">Description</label>
@@ -119,6 +134,50 @@
         $('#image').hide();
         $('#img').click(function(){
             $('#image').click();
+        })
+        $('#image').change(function(){
+            var formData=new FormData();
+            let file=this.files[0];
+            formData.append('image',file);
+            $.ajax({
+                url:'moveFile.php',
+                method:'post',
+                data:formData,
+                contentType:false,
+                processData:false,
+                cache:false,
+                success:function(respone){
+                    $('#img').attr('src','../upload/'+respone)
+                    $('#image_name').val(respone)
+                }
+            });
+        })
+        $('#save').click(function(){
+            // get data from form
+            let user_id=$('#user_id').val();
+            let name=$('#name').val();
+            let price=$('#price').val();
+            let time=$('#time').val();
+            let image=$('#image_name').val();
+            let des=$('#description').val();
+            $.ajax({
+                url:'insert.php',
+                method:'post',
+                data:{
+                    user_id:user_id,
+                    name:name,
+                    price:price,
+                    time:time,
+                    image:image,
+                    des:des
+                },
+                cache:false,
+                success:function(response){
+                    console.log(response);
+                    
+                }
+            });
+            $('.modal').hide();
         })
     })
 </script>          
