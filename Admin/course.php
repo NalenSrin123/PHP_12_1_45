@@ -81,39 +81,47 @@ include '../connection.php';
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr class="hover:bg-gray-50 transition-colors duration-200">
+                    <tbody class="bg-white divide-y divide-gray-200" id="tbody">
+                        <?php 
+                            include '../connection.php';
+                            global $con;
+                            $select_course="SELECT * FROM `course`";
+                            $exe=$con->query($select_course);
+                            while($row=$exe->fetch_assoc()){
+                                echo '
+                                    <tr class="hover:bg-gray-50 transition-colors duration-200">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
     
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">1</div>
+                                        <div class="text-sm font-medium text-gray-900">'.$row['id'].'</div>
                                        
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">JS</div>
+                                <div class="text-sm text-gray-900">'.$row['course_name'].'</div>
                               
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                59$
+                                '.$row['price'].'$
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                12:30-1:45
+                                '.$row['time'].'
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                <img class="w-[40px] h-[40px] rounded-md" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png" alt="">
+                                <img class="w-[40px] h-[40px] rounded-md" src="../upload/'.$row['image'].'" alt="">
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
                                 <button class="text-red-600 hover:text-red-900">Delete</button>
                             </td>
                         </tr>
-                      
+                                ';
+                            }
+                        ?>
                         
-                        
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -173,7 +181,36 @@ include '../connection.php';
                 },
                 cache:false,
                 success:function(response){
-                    console.log(response);
+                   $('#tbody').append(`
+                     <tr class="hover:bg-gray-50 transition-colors duration-200">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+    
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">${response}</div>
+                                       
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">${name}</div>
+                              
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                ${price}$
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                ${time}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <img class="w-[40px] h-[40px] rounded-md" src="../upload/${image}" alt="">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                                <button class="text-red-600 hover:text-red-900">Delete</button>
+                            </td>
+                        </tr>
+                   `);
                     
                 }
             });
