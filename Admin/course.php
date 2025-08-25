@@ -16,6 +16,7 @@ include '../connection.php';
         <h1 id="title">Add Course</h1>
         <div class="form-group">
             <input type="hidden" name="" id="user_id" value="<?php echo $user['id'] ?>">
+             <input type="text" name="" id="course_id">
             <label for="">Course Name</label>
             <select name="name" id="name" class="form-control">
                 <option value="Web Design">Web Design</option>
@@ -39,7 +40,7 @@ include '../connection.php';
             <label for="">Image</label>
             <input type="file" name="image" id="image" class="form-control">
             <img class="w-[60px] rounded-md cursor-pointer"  id="img" src="https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=" alt="">
-            <input type="hidden" name="image_name" id="image_name">
+            <input type="text" name="image_name" id="image_name">
         </div>
         <div class="form-group">
             <label for="">Description</label>
@@ -76,6 +77,7 @@ include '../connection.php';
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Image
                             </th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Actions
                             </th>
@@ -112,8 +114,11 @@ include '../connection.php';
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 <img class="w-[40px] h-[40px] rounded-md" src="../upload/'.$row['image'].'" alt="">
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                '.$row['description'].'
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                                <button class="text-blue-600 hover:text-blue-900 mr-3" id="btnEdit" >Edit</button>
                                 <button class="text-red-600 hover:text-red-900">Delete</button>
                             </td>
                         </tr>
@@ -163,11 +168,11 @@ include '../connection.php';
         $('#save').click(function(){
             // get data from form
             let user_id=$('#user_id').val();
-            let name=$('#name').val();
-            let price=$('#price').val();
-            let time=$('#time').val();
-            let image=$('#image_name').val();
-            let des=$('#description').val();
+            let name=  $('#name').val();
+            let price= $('#price').val();
+            let time=  $('#time').val();
+            let image= $('#image_name').val();
+            let des=   $('#description').val();
             $.ajax({
                 url:'insert.php',
                 method:'post',
@@ -205,8 +210,11 @@ include '../connection.php';
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 <img class="w-[40px] h-[40px] rounded-md" src="../upload/${image}" alt="">
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                ${des}
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                                <button class="text-blue-600 hover:text-blue-900 mr-3" id="btnEdit">Edit</button>
                                 <button class="text-red-600 hover:text-red-900">Delete</button>
                             </td>
                         </tr>
@@ -216,5 +224,91 @@ include '../connection.php';
             });
             $('.modal').hide();
         })
+        let tr='';
+        $(document).on('click','#btnEdit',function(){
+            $('.modal').show();
+            $('#save').hide();
+            $('#edit').show();
+            $('#title').html('Edit Course');
+            // get data from table
+            tr=$(this).parents('tr');
+            const t_id=tr.find('td').eq(0).text().trim();
+            const t_name=tr.find('td').eq(1).text().trim();
+            const t_price=tr.find('td').eq(2).text().split('$')[0].trim();
+            const t_time=tr.find('td').eq(3).text().trim();
+            const t_image=tr.find('img').attr('src').split('/').pop().trim();
+            const t_des=tr.find('td').eq(5).text().trim();
+            // take data from table insert to form
+                $('#course_id').val(t_id);
+                $('#name').val(t_name);
+                $('#price').val(t_price);
+                $('#time').val(t_time);
+                $('#image_name').val(t_image);
+                $('#img').attr('src',`../upload/${t_image}`);
+                $('#description').val(t_des);
+            
+            $('#edit').click(function(){
+                let user_id=$('#user_id').val();
+                let course_id=$('#course_id').val();
+                let name=  $('#name').val();
+                let price= $('#price').val();
+                let time=  $('#time').val();
+                let image= $('#image_name').val();
+                let des=   $('#description').val();
+                $.ajax({
+                    url:'update.php',
+                    method:'post',
+                    data:{
+                        user_id:user_id,
+                        course_id:course_id,
+                        name:name,
+                        price:price,
+                        time:time,
+                        image:image,
+                        des:des
+                    },
+                    cache:false,
+                    success:function(res){
+                        if(res=='Success'){
+                            tr.html(`
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+    
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">${course_id}</div>
+                                       
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">${name}</div>
+                              
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                  ${Number(price).toFixed(2)}$
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                ${time}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <img class="w-[40px] h-[40px] rounded-md" src="../upload/${image}" alt="">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                ${des}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900 mr-3" id="btnEdit">Edit</button>
+                                <button class="text-red-600 hover:text-red-900">Delete</button>
+                            </td>
+                            `);
+                        }
+                        
+                    }
+                })
+                $('.modal').hide()
+            })
+            
+          
+        });
     })
 </script>          
