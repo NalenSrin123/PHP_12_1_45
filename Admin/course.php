@@ -1,4 +1,15 @@
-
+<style>
+    .modal-delete{
+     width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    background-color: rgba(231, 231, 231, 0.743);
+    z-index: 222;
+    /* display: none; */
+    
+}
+</style>
 <?php 
 session_start();
 ini_set('display_errors', 1);
@@ -16,7 +27,7 @@ include '../connection.php';
         <h1 id="title">Add Course</h1>
         <div class="form-group">
             <input type="hidden" name="" id="user_id" value="<?php echo $user['id'] ?>">
-             <input type="text" name="" id="course_id">
+             <input type="hidden" name="" id="course_id">
             <label for="">Course Name</label>
             <select name="name" id="name" class="form-control">
                 <option value="Web Design">Web Design</option>
@@ -40,7 +51,7 @@ include '../connection.php';
             <label for="">Image</label>
             <input type="file" name="image" id="image" class="form-control">
             <img class="w-[60px] rounded-md cursor-pointer"  id="img" src="https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=" alt="">
-            <input type="text" name="image_name" id="image_name">
+            <input type="hidden" name="image_name" id="image_name">
         </div>
         <div class="form-group">
             <label for="">Description</label>
@@ -52,7 +63,19 @@ include '../connection.php';
             <button type="button" class="py-2 px-3 text-white rounded-md bg-red-500" id="cancel">Cancel</button>
         </div>
     </form>
-</div>  
+</div>
+
+<!-- modal delete -->
+<div class="modal-delete hidden">
+    <form action="" method="post">
+        <h2 class="text-xl font-bold ">Are you sure to delete ?</h2>
+        <input type="hidden" name="delete_id" id="delete_id">
+        <div class="flex gap-2 justify-end ">
+            <button type="button" class="py-2 px-3 bg-gray-200 rounded-md hover:bg-gray-300 " id="cancelDelete">Cancel</button>
+            <button type="button" class="py-2 px-3 bg-red-500 rounded-md text-white hover:bg-red-600" id="btnDelete">Yes, delete it.</button>
+        </div>
+    </form>
+</div>
 <?php 
     include 'sidebar.php';
 ?>
@@ -119,7 +142,7 @@ include '../connection.php';
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <button class="text-blue-600 hover:text-blue-900 mr-3" id="btnEdit" >Edit</button>
-                                <button class="text-red-600 hover:text-red-900">Delete</button>
+                                <button class="text-red-600 hover:text-red-900" delete-id="'.$row['id'].'" id="delete">Delete</button>
                             </td>
                         </tr>
                                 ';
@@ -215,7 +238,7 @@ include '../connection.php';
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <button class="text-blue-600 hover:text-blue-900 mr-3" id="btnEdit">Edit</button>
-                                <button class="text-red-600 hover:text-red-900">Delete</button>
+                                <button class="text-red-600 hover:text-red-900" delete-id="${response}" id="delete">Delete</button>
                             </td>
                         </tr>
                    `);
@@ -298,7 +321,7 @@ include '../connection.php';
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <button class="text-blue-600 hover:text-blue-900 mr-3" id="btnEdit">Edit</button>
-                                <button class="text-red-600 hover:text-red-900">Delete</button>
+                                <button class="text-red-600 hover:text-red-900" delete-id="${course_id}" id="delete">Delete</button>
                             </td>
                             `);
                         }
@@ -306,9 +329,34 @@ include '../connection.php';
                     }
                 })
                 $('.modal').hide()
-            })
-            
-          
+            }) 
         });
+        $(document).on('click','#delete',function(){
+            let id=$(this).attr('delete-id');
+            tr=$(this).parents('tr');
+            $('.modal-delete').show();
+            $('#delete_id').val(id);
+            $('#btnDelete').click(function(){
+                let delete_id=$('#delete_id').val();
+                $.ajax({
+                    url:'delete.php',
+                    method:'post',
+                    data:{
+                        id:delete_id
+                    },
+                    cache:false,
+                    success:function(res){
+                        if(res=='Success'){
+                            tr.remove();
+                        }
+                        
+                    }
+                })
+                $('.modal-delete').hide();
+            })
+        })
+        $('#cancelDelete').click(function(){
+            $('.modal-delete').hide();
+        })
     })
 </script>          
