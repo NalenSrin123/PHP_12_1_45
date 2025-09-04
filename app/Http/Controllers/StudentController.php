@@ -13,4 +13,8 @@ class StudentController extends Controller
     public function registerStudent(){
         return view('Register');
     }
+    public function getStudent(Request $request){
+
+        return $request;
+    }
 }

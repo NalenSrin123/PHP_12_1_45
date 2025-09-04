@@ -15,4 +15,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',[StudentController::class,'showStudent']);
-Route::get('/student-register',[StudentController::class,'registerStudent']);
+Route::get('/student-register',[StudentController::class,'registerStudent'])->name('register');
+Route::post('/register-submit',[StudentController::class,'getStudent'])->name('submit');

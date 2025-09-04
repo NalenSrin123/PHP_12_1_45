@@ -15,7 +15,7 @@
                     <p class="text-gray-600 mt-1">Manage and view registered users</p>
                 </div>
                 <div>
-                    <a href="">Register Student</a>
+                    <a href="{{route('register')}}">Register Student</a>
                 </div>
             </div>
 

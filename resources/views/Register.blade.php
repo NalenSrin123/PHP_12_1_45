@@ -13,7 +13,9 @@
             <p class="text-gray-600">Please fill in your information to register</p>
         </div>
 
-        <form class="space-y-4">
+        <form class="space-y-4" method="post" action="{{route('submit')}}">
+            {{-- @csrf token use for send data to controller --}}
+            @csrf
             <!-- ID Field -->
             <div>
                 <label for="id" class="block text-sm font-medium text-gray-700 mb-1">
@@ -23,7 +25,7 @@
                     type="text"
                     id="id"
                     name="id"
-                    required
+
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter your ID number"
                 >
@@ -38,7 +40,7 @@
                     type="text"
                     id="name"
                     name="name"
-                    required
+
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter your full name"
                 >
@@ -52,17 +54,15 @@
                 <select
                     id="sex"
                     name="sex"
-                    required
+
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                    <option value="">Select gender</option>
+                    <option value="" disabled selected>Select gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
                 </select>
             </div>
-
-            <!-- Email Field -->
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
                     Email Address
@@ -71,7 +71,7 @@
                     type="email"
                     id="email"
                     name="email"
-                    required
+
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter your email address"
                 >
@@ -86,7 +86,7 @@
                     id="address"
                     name="address"
                     rows="3"
-                    required
+
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                     placeholder="Enter your full address"
                 ></textarea>
@@ -101,7 +101,7 @@
                     type="date"
                     id="dob"
                     name="dob"
-                    required
+
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
             </div>
@@ -115,7 +115,7 @@
                     type="tel"
                     id="phone"
                     name="phone"
-                    required
+
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter your phone number"
                 >
