@@ -23,5 +23,6 @@ use Illuminate\Support\Facades\Route;
 // route group with controller
 Route::controller(ProductController::class)->group(function(){
     Route::get('/','getAllProduct');
-    // Route::post('/add-product','addProduct');
+    Route::post('/add-product','addProduct')->name('submit');
+   
 });
