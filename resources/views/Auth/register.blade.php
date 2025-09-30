@@ -18,7 +18,7 @@
 </style>
 <body>
     <div class="container">
-        <form action="{{route('login')}}" method="post" enctype="multipart/form-data">
+        <form action="{{route('register')}}" method="post" enctype="multipart/form-data">
             @csrf
             <h3 class="text-center">Register Form</h3>
             <div class="form-group">

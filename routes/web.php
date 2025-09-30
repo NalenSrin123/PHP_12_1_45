@@ -26,11 +26,9 @@ Route::controller(UserController::class)->group(function(){
     Route::post('/auth/login','login')->name('login');
     Route::get('/auth/register','showFormRegister')->name('register');
     Route::post('/auth/register','reigster')->name('register');
+    Route::get('/auth/logout','logout');
 });
 // route with middleware
 Route::middleware('auth')->group(function(){
-    Route::get('/admin/dashboard', function () {
-        return view('Dashboard.index');
-    });
+    Route::get('/admin/dashboard',[UserController::class,'dashboard']);
 });
-
